@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+   This is the Cartpage. proceed to recvie your items and place your order
+{% endblock %}
+ {% block title %}
+ Cart-Organic store PVT LTD
+{% endblock %}
+{% block content %}
+{% if not cartitems %}
+    <div>
+    <div class="text-center">
+      <br>
+        <h1 class="text-center my_title">
+            Yor Shopping Cart is Empty
+        </h1>
+        <br>
+        <p class="text-center">
+            Pleace click <a href="{% url 'shoppingapp:allproduct' %}">Here</a>To continue
+        </p>
+    </div>
+    </div>
+  {% else %}
+    <div>
+    <div class="text-center">
+      <br>
+        <h1 class="text-center my_title">
+            Your Shopping Cart
+        </h1>
+    </div>
+
+        <div class="row mx-auto">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-6 text-center">
+
+            <table class="table  my_custom_table">
+
+                <thead class="my_custom_thead">
+                 <tr>
+                     <th colspan="5">
+                         Your Items
+                     </th>
+                 </tr>
+                </thead>
+
+                <tbody>
+                 {% for cartitem in cartitems %}
+                <tr>
+                    <td>
+                        <a href="cartitem.product.get_absolute_url"><img src="{{ cartitem.product.image.url }}" alt=""  style="width:100px; height: 100px; " class="float-left rounded custom_image"></a>
+                    </td >
+
+                    <td class=" text-lef">
+                        {{ cartitem.product.name }}
+                        <br>
+                        {{ cartitem.product.id }}
+                        <br>
+                        ${{ cartitem.product.price }}
+                        <br>
+                        {{ cartitem.quantity }} x ${{ cartitem }}
+                    </td>
+
+                    <td>
+                        ${{ cartitem.sub_total }}
+                    </td>
+
+                    {% if cartitem.quantity < cartitem.product.stock %}
+
+                        <td>
+                        <a href="{% url 'cartapp:add_cart' cartitem.product.id %}" class="custom_a"> <i class="fa-solid fa-plus"></i></a>
+                            &nbsp;&nbsp;<a href="{% url 'cartapp:cart_remove' cartitem.product.id %}" class="custom_a "><i class="fa-solid fa-minus"></i></a>
+                            &nbsp;&nbsp;<a href="{% url 'cartapp:full_remove' cartitem.product.id %}" class="custom_a "><i class="fa-solid fa-trash"></i></a>
+                        </td>
+
+                    {% else %}
+                         <td>
+
+                            &nbsp;<a href="{%  url 'cartapp:cart_remove' cartitem.product.id %}" class=" custom_a "> <i class="fa-solid fa-minus"></i></a>
+                            &nbsp;<a href="{% url 'cartapp:full_remove' cartitem.product.id %}" class="custom_a "><i class="fa-solid fa-trash"></i></a>
+                        </td>
+                    {% endif %}
+
+                </tr>
+
+                 {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+
+          <div class="col-12 col-sm-12 col-md-12 col-lg-6 text-center">
+              <table class="table my_custom_table">
+                  <thead class="my_custom_thead">
+                  <tr>
+                      <th>
+                          Check Out
+                      </th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr>
+                      <td>
+                          Please feedback Here........
+                      </td>
+                  </tr>
+                  <tr>
+                      <td class="text-left">
+                          Your total is : <strong>{{ total }}</strong>
+
+                      </td>
+                  </tr>
+                  </tbody>
+              </table>
+              <div class="mx-auto">
+                  <a href="{% url 'shoppingapp:allproduct' %}" class="btn btn-secondary btn-block my_custom_button"> Continue shopping</a>
+              </div>
+
+          </div>
+    </div>
+    </div>
+{% endif %}
+{% endblock %}

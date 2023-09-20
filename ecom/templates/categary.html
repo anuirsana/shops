@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+  {% if categary %}
+    {{Categary.description|truncatewords:155 }}
+  {% else %}
+   Welcome to Organic Store you can buy different itemssss..........
+  {% endif %}
+{% endblock %}
+
+ {% block title %}
+ {% if categary  %}
+  {{ categary.name }}Organic Store
+ {% else %}
+  See Our New Collections
+{% endif %}
+{% endblock %}
+
+{% block content %}
+{% if categary %}
+
+    <div class="row my_row_class">
+        <div class="mx-auto">
+        <p>
+            <a href="{%  url 'shoppingapp:allproduct' %}"> Our Product Collections</a>
+        </p>
+        </div>
+    </div>
+
+
+{% endif %}
+   <div class="mx-auto">
+       {% if categary %}
+       <img class="my_image" src="{{categary.image.url}}"alt="{{ categary.name }} " width="1200px" height="350px" size="center">
+   </div>
+   <br>
+<div>
+    <h1 class="text-center my_title" > {{ categary.name }}</h1>
+    <p class="text-justify">  {{ categary.description }}</p>
+</div>
+     {% else %}
+    <div>
+        <img class="my_image my_image_padding" src="{% static 'img/banner.png' %}" alt="our product" width="1300px" height="250px">
+
+    </div>
+<br>
+<div>
+   <h1 class="text-center my_title "> Our Products Collections</h1>
+    <p class="text-justify">
+     Organic foods are grown either by natural means, without chemical fertilizers or obtained from nature. Such farming methods can produce organic foods in a fairly clean and safe manner and are also very beneficial for human health. Organic foods are free from any type of chemical fertilizers and pesticides. In addition, organic fertilizers are used in place of chemical fertilizers and mainly these fertilizers are used only in organic farming.
+    </p>
+</div>
+{% endif %}
+    <div class="container">
+    <div class="row mx-auto">
+        {% for product in products.object_list %}
+        <div class="my_bottom_margin col-9 col-sm-12 col-md-4  xol-lg-4">
+            <div class="card text-center" style="min-width:18rem">
+                <a href="{{ product.get_url }}"><img class="card-img-top  my_image" src="{{ product.image.url }}" alt="{{ product.name }}">
+                </a>
+                <div class="card-body">
+                   <h4> {{ product.name }}</h4>
+                    <p> ${{ product.price }}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="mx-auto">
+        {% if products.paginator.num_pages > 1 %}
+            <hr>
+    <div class="text-center">
+        {%  for pg in products.paginator.page_range %}
+
+           <a href="?page={{pg}}" class="btn btn-light btn-sm {% if products.number == pg %} active {% endif %}">{{pg}}</a>
+
+        {% endfor %}
+    </div>
+         {% endif%}
+    </div>
+
+        <br>
+    </div>
+
+{% endblock %}
